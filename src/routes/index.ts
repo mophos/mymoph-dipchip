@@ -105,14 +105,14 @@ router.post('/dipchip', async (req: Request, res: Response) => {
             res.send({ ok: true });
           } else {
             for (const d of device) {
-              fcmModel.sendMessage(d.fcm_token, 'ยืนยันตัวตนไม่สำเร็จ', 'กรุณาลองใหม่อีกครั้ง')
+              fcmModel.sendMessage(d.fcm_token, 'ยืนยันตัวตนไม่สำเร็จ(a)', 'กรุณาลองใหม่อีกครั้ง')
             }
             res.status(500);
             res.send({ ok: false, error: 'update member ไม่ได้' });
           }
         } else {
           for (const d of device) {
-            fcmModel.sendMessage(d.fcm_token, 'ยืนยันตัวตนไม่สำเร็จ', 'กรุณาลองใหม่อีกครั้ง')
+            fcmModel.sendMessage(d.fcm_token, 'ยืนยันตัวตนไม่สำเร็จ(b)', 'กรุณาลองใหม่อีกครั้ง')
           }
           // not found
           res.send({ ok: false, error: 'session not found' });
