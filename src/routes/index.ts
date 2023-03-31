@@ -47,10 +47,10 @@ router.post('/dipchip', async (req: Request, res: Response) => {
     const newSessionId = `${sessionId.split("-")[0]}-${sessionId.split("-")[3]}`;
     // save session for verify
     const rs: any = await requestModel.getProfile(accessToken);
-    if (rs.cid) {
-      if (rs.cid == cid) {
+    if (rs.statusCode == 200) {
+      if (rs.body.cid == cid) {
         const device: any = await requestModel.getDeviceFcm(req.db, cid);
-        const info: any = await requestModel.getUser(req.db, rs.cid);
+        const info: any = await requestModel.getUser(req.db, rs.body.cid);
         const checkss: any = await requestModel.checkSession(req.db, newSessionId, cid);
         await requestModel.removeSession(req.db, newSessionId, cid);
         if (info.length && checkss.length) {
@@ -58,7 +58,7 @@ router.post('/dipchip', async (req: Request, res: Response) => {
             length: 20,
             numbers: true
           });
-          await requestModel.updateUser(req.db, rs.cid, { password_internet: passwordInternet });
+          await requestModel.updateUser(req.db, rs.body.cid, { password_internet: passwordInternet });
           const obj: any = {
             cid: cid,
             first_name: fname,
