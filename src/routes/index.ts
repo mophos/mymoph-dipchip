@@ -44,7 +44,7 @@ router.post('/dipchip', async (req: Request, res: Response) => {
     const cid = sessionId.split("-")[0];
     const fname = sessionId.split("-")[1];
     const lname = sessionId.split("-")[2];
-    const newSessionId = `${sessionId.split("-")[0]}-${sessionId.split("-")[3]}`;
+    const newSessionId = `${sessionId.split("-")[3]}`;
     // save session for verify
     const rs: any = await requestModel.getProfile(accessToken);
     if (rs.statusCode == 200) {
