@@ -20,11 +20,11 @@ export class RequestModel {
         'Authorization': `Bearer ${token}`
       }
     };
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       axios.request(options).then(function (response) {
-        resolve(response.data)
+        resolve({ statusCode: response.status, body: response.data });
       }).catch(function (error) {
-        reject(error)
+        resolve({ statusCode: error.response.status, error: error.response.data });
       });
     });
   }

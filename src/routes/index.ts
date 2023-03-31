@@ -145,9 +145,9 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
 
     // save session for verify
     const rs: any = await requestModel.getProfile(accessToken);
-    if (rs.cid) {
-      if (rs.cid == cid) {
-        // const info: any = await requestModel.getUser(req.db, rs.cid);
+    if (rs.statusCode == 200) {
+      if (rs.body.cid == cid) {
+        // const info: any = await requestModel.getUser(req.db, rs.body.cid);
         console.log(newSessionId, cid);
         const checkss: any = await requestModel.checkSession(req.db, newSessionId, cid);
         await requestModel.removeSession(req.db, newSessionId, cid);
@@ -186,7 +186,7 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
               isCreate = _isCreate.ok;
             } catch (error) {
               console.log(error);
-            } await requestModel.updateUser(req.db, rs.cid,
+            } await requestModel.updateUser(req.db, rs.body.cid,
               {
                 password_internet: passwordInternet,
                 is_ekyc: 'Y',
@@ -208,8 +208,7 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
         res.send({ ok: false, error: 'ข้อมูลไม่ตรง กรุณาลองใหม่อีกครั้ง' });
       }
     } else {
-      console.log('errgetpf');
-      res.status(500);
+      res.status(401);
       res.send({ ok: false, error: 'Access denied' });
     }
   } catch (error) {
