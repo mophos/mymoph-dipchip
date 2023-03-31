@@ -52,7 +52,6 @@ router.post('/dipchip', async (req: Request, res: Response) => {
         const device: any = await requestModel.getDeviceFcm(req.db, cid);
         const info: any = await requestModel.getUser(req.db, rs.body.cid);
         const checkss: any = await requestModel.checkSession(req.db, newSessionId, cid);
-        await requestModel.removeSession(req.db, newSessionId, cid);
         if (info.length && checkss.length) {
           const passwordInternet = await generator.generate({
             length: 20,
@@ -66,6 +65,7 @@ router.post('/dipchip', async (req: Request, res: Response) => {
             session_id: newSessionId
           }
           const vf: any = await requestModel.verifyKycDipchip(obj);
+          await requestModel.removeSession(req.db, newSessionId, cid);
           if (vf.ok) {
             // mqtt
             for (const d of device) {
