@@ -188,22 +188,22 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
             res.send({ ok: true });
           } else {
             res.status(500);
-            res.send({ ok: false, error: 'update member ไม่ได้' });
+            res.send({ ok: false, error: 'ติดต่อฐานข้อมูลสมาชิกไม่ได้' });
           }
         } else {
           res.status(500);
           // not found
-          res.send({ ok: false, error: 'session not found' });
+          res.send({ ok: false, error: 'Qrcode นี้ใช้งานไม่ได้ กรุณาลองใหม่อีกครั้ง' });
         }
       } else {
         console.log('cid!=cid');
         res.status(500);
-        res.send({ ok: false, error: 'cid!=cid' });
+        res.send({ ok: false, error: 'ข้อมูลไม่ตรง กรุณาลองใหม่อีกครั้ง' });
       }
     } else {
       console.log('errgetpf');
       res.status(500);
-      res.send({ ok: false, error: 'getpf' });
+      res.send({ ok: false, error: 'Access denied' });
     }
   } catch (error) {
     console.log(error);
