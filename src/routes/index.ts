@@ -150,7 +150,6 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
         // const info: any = await requestModel.getUser(req.db, rs.body.cid);
         console.log(newSessionId, cid);
         const checkss: any = await requestModel.checkSession(req.db, newSessionId, cid);
-        await requestModel.removeSession(req.db, newSessionId, cid);
         if (checkss.length) {
           const passwordInternet = await generator.generate({
             length: 20,
@@ -164,6 +163,7 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
             session_id: newSessionId
           }
           const vf: any = await requestModel.verifyKycDipchip(obj);
+          await requestModel.removeSession(req.db, newSessionId, cid);
           if (vf.ok) {
 
             let isCreate: any = false;
