@@ -3,7 +3,9 @@ import * as express from 'express';
 import { Router, Request, Response } from 'express';
 import { Jwt } from '../models/jwt';
 import { v4 as uuidv4 } from 'uuid';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid/async';
+
 import * as HttpStatus from 'http-status-codes';
 import { FcmModel } from './../models/fcm';
 var generator = require('generate-password');
@@ -19,7 +21,7 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/qr', async (req: Request, res: Response) => {
   try {
     const cid = req.query.cid;
-    const sessionId: any = await nanoid();
+    const sessionId: any = await nanoid(21);
     // const sessionId: any = await uuidv4();
     const rs: any = await requestModel.saveSession(req.db, cid, sessionId);
     if (rs) {
