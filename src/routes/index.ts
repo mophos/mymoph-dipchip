@@ -142,6 +142,7 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
     if (rs.cid) {
       if (rs.cid == cid) {
         // const info: any = await requestModel.getUser(req.db, rs.cid);
+        console.log(newSessionId, cid);
         const checkss: any = await requestModel.checkSession(req.db, newSessionId, cid);
         await requestModel.removeSession(req.db, newSessionId, cid);
         if (checkss.length) {
