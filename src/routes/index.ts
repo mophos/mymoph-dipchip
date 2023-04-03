@@ -156,7 +156,6 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
             length: 20,
             numbers: true
           });
-
           const obj: any = {
             cid: cid,
             first_name: fname,
@@ -189,6 +188,8 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
               console.log(error);
             } await requestModel.updateUser(req.db, rs.body.cid,
               {
+                first_name: fname,
+                last_name: lname,
                 password_internet: passwordInternet,
                 is_ekyc: 'Y',
                 is_created_ldap: isCreate ? 'Y' : 'N'
