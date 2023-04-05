@@ -1,3 +1,4 @@
+import { HrModel } from './../models/hr';
 import { RequestModel } from './../models/requests';
 import * as express from 'express';
 import { Router, Request, Response } from 'express';
@@ -13,7 +14,7 @@ const jwt = new Jwt();
 const requestModel = new RequestModel();
 const router: Router = Router();
 const fcmModel = new FcmModel();
-
+const hrModel = new HrModel();
 router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
@@ -165,7 +166,6 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
           const vf: any = await requestModel.verifyKycDipchip(obj);
           await requestModel.removeSession(req.db, newSessionId, cid);
           if (vf.ok) {
-
             let isCreate: any = false;
             try {
               let _isCreate: any = await requestModel.generateUserInternet({
@@ -217,6 +217,38 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
     console.log(error);
     res.status(500);
     res.send({ ok: false });
+  }
+});
+
+
+router.get('/', (req: Request, res: Response) => {
+  res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
+});
+
+
+router.get('/status', async (req: Request, res: Response) => {
+  try {
+    const cid = req.query.cid;
+    if (cid) {
+      const c: any = await hrModel.authen();
+      if (c.ok) {
+        const accessToken = c.access_token;
+        const refreshToken = c.refresh_token;
+        const rs: any = await hrModel.getData(cid, accessToken);
+        if (rs.ok) {
+          res.send({ ok: true });
+        } else {
+          res.send({ ok: false, error: 'ไม่พบข้อมูล' })
+        }
+      } else {
+        res.send({ ok: false, error: 'ไม่พบข้อมูล.' })
+      }
+    } else {
+      res.send({ ok: false, error: 'ไม่พบเลขบัตรประชาชน' })
+    }
+  } catch (error) {
+    res.status(HttpStatus.BAD_GATEWAY);
+    res.send({ ok: false, error: error.message });
   }
 });
 
