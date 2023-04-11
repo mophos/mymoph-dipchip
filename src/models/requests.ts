@@ -133,7 +133,7 @@ export class RequestModel {
   }
 
   updateUser(db, data) {
-    return db('users').insert(data).conflict().merge(data)
+    return db('users').insert(data).onConflict().merge()
     // update(data).where('cid', cid);
   }
 
