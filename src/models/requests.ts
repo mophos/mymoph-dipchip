@@ -132,8 +132,9 @@ export class RequestModel {
     });
   }
 
-  updateUser(db, cid, data) {
-    return db('users').update(data).where('cid', cid);
+  updateUser(db, data) {
+    return db('users').insert(data).conflict().merge(data)
+    // update(data).where('cid', cid);
   }
 
 }

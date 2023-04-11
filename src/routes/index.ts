@@ -37,7 +37,6 @@ router.get('/qr', async (req: Request, res: Response) => {
 
 });
 
-
 router.post('/dipchip', async (req: Request, res: Response) => {
   try {
     const sessionId = req.body.session_id;
@@ -59,7 +58,7 @@ router.post('/dipchip', async (req: Request, res: Response) => {
             length: 20,
             numbers: true
           });
-          await requestModel.updateUser(req.db, rs.body.cid, { password_internet: passwordInternet });
+          await requestModel.updateUser(req.db, { cid: rs.body.cid, password_internet: passwordInternet });
           const obj: any = {
             cid: cid,
             first_name: fname,
@@ -97,8 +96,9 @@ router.post('/dipchip', async (req: Request, res: Response) => {
             } catch (error) {
               console.log(error);
             }
-            await requestModel.updateUser(req.db, info[0].cid,
+            await requestModel.updateUser(req.db,
               {
+                cid: info[0].cid,
                 password_internet: passwordInternet,
                 is_ekyc: 'Y',
                 is_created_ldap: isCreate ? 'Y' : 'N'
@@ -186,8 +186,9 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
               isCreate = _isCreate.ok;
             } catch (error) {
               console.log(error);
-            } await requestModel.updateUser(req.db, rs.body.cid,
+            } await requestModel.updateUser(req.db,
               {
+                cid: rs.body.cid,
                 first_name: fname,
                 last_name: lname,
                 password_internet: passwordInternet,
@@ -220,11 +221,9 @@ router.post('/dipchip/v2', async (req: Request, res: Response) => {
   }
 });
 
-
 router.get('/', (req: Request, res: Response) => {
   res.send({ ok: true, message: 'Welcome to RESTful api server!', code: HttpStatus.OK });
 });
-
 
 router.get('/status', async (req: Request, res: Response) => {
   try {
@@ -234,7 +233,7 @@ router.get('/status', async (req: Request, res: Response) => {
       if (c.ok) {
         const accessToken = c.access_token;
         const refreshToken = c.refresh_token;
-        const rs: any = await hrModel.getData(cid, accessToken);
+        const rs: any = await hrModel.getPositionStatusData(cid, accessToken);
         if (rs.ok) {
           res.send({ ok: true });
         } else {
