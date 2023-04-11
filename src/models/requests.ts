@@ -4,6 +4,12 @@ var axios = require("axios").default;
 export class RequestModel {
 
   saveSession(db: Knex.QueryInterface, cid, sessionId) {
+    db.table('dipchip_sessions_logs')
+      .insert({
+        cid: cid,
+        session_id: sessionId
+      });
+
     return db.table('dipchip_sessions')
       .insert({
         cid: cid,
