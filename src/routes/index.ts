@@ -235,7 +235,11 @@ router.get('/status', async (req: Request, res: Response) => {
         const refreshToken = c.refresh_token;
         const rs: any = await hrModel.getPositionStatusData(cid, accessToken);
         if (rs.ok) {
-          res.send({ ok: true });
+          if (rs.data.cid == cid) {
+            res.send({ ok: true });
+          } else {
+            res.send({ ok: false, error: 'ไม่พบข้อมูล' })
+          }
         } else {
           res.send({ ok: false, error: 'ไม่พบข้อมูล' })
         }
